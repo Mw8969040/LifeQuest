@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using LIfeQuest.PresentationLayer.Models;
+using LIfeQuest.PresentationLayer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LIfeQuest.PresentationLayer.Controllers
