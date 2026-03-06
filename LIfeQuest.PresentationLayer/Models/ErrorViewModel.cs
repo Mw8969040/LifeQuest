@@ -1,4 +1,4 @@
-namespace LIfeQuest.PresentationLayer.Models
+namespace LifeQuest.Models
 {
     public class ErrorViewModel
     {
