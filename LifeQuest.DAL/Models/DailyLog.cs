@@ -1,19 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LifeQuest.Models
+namespace LifeQuest.DAL.Models
 {
-    public class DailyLog
+    public class DailyLog : BaseEntity
     {
-        public int id { get; set; }
-        //Duration per one challange
+        // Duration per one challenge
         public int Duration { get; set; }
-        //Points per one Challange
+
+        // Points per one challenge
         public int Points { get; set; }
+
         public int CurrentProgress { get; set; }
 
-        [ForeignKey("Challange")]
-        public int ChallangeId { get; set; }
-        public Challenge Challange { get; set; }
-        public string Notes { get; set; }
+        [ForeignKey("Challenge")]
+        public int ChallengeId { get; set; }
+
+        public Challenge? Challenge { get; set; }
+
+        public string Notes { get; set; } = string.Empty;
     }
 }

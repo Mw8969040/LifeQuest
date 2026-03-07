@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace LifeQuest.Models
+namespace LifeQuest.DAL.Models
 {
-    public class Category
+    public class Category : BaseEntity
     {
-        public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public List<Challenge> Challanges { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        public HashSet<Challenge> Challenges { get; set; } = new();
     }
 }

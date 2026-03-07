@@ -1,12 +1,14 @@
-﻿namespace LifeQuest.Models
+namespace LifeQuest.DAL.Models
 {
-    public class Level
+    public class Level : BaseEntity
     {
-        public int Id { get; set; }
         public int LevelsCount { get; set; }
-        public string LevelName { get; set; }
-        //points to gained in new Level
+
+        public string LevelName { get; set; } = string.Empty;
+
+        // Points required to gain this level
         public int Point { get; set; }
-        public UserProfile UserProfile { get; set; }
+
+        public UserProfile? UserProfile { get; set; }
     }
 }

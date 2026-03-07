@@ -1,31 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LifeQuest.Models
+namespace LifeQuest.DAL.Models
 {
-    public class Challenge
+    public class Challenge : BaseEntity
     {
-        public int Id { get; set; }
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
+
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
+
         [Required]
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+
+        public Category? Category { get; set; }
+
         [Required]
         public int Duration { get; set; }
+
         [Required]
-        public bool isPublic { get; set; }
+        public bool IsPublic { get; set; }
+
         [RegularExpression("^(Easy|Medium|Hard)$")]
-        public string Difficulty { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public string Difficulty { get; set; } = string.Empty;
 
         [ForeignKey("ApplicationUser")]
-        public int ApplicationUserId {  get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-        public List<DailyLog> DailyLogs { get; set; }
+        public int ApplicationUserId { get; set; }
+
+        public ApplicationUser? ApplicationUser { get; set; }
+
+        public HashSet<DailyLog> DailyLogs { get; set; } = new();
     }
 }

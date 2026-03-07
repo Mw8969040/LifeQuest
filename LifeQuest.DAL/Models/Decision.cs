@@ -1,17 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace LifeQuest.Models
+namespace LifeQuest.DAL.Models
 {
-    public class Decision
+    public class Decision : BaseEntity
     {
-        public int id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+
         [Required]
         public bool IsConfident { get; set; }
+
         [Required]
         public bool IsSuccess { get; set; }
-        public MetricsCalc MetricsCalcs { get; set; }
 
+        public MetricsCalc? Metrics { get; set; }
     }
 }
