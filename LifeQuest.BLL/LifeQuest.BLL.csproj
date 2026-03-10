@@ -6,27 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Models\**" />
-    <Compile Remove="Services\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <None Remove="Models\**" />
-    <None Remove="Services\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LifeQuest.DAL\LifeQuest.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="bin - Copy\Debug\net10.0\" />
-    <Folder Include="obj - Copy\Debug\net10.0\refint\" />
-    <Folder Include="obj - Copy\Debug\net10.0\ref\" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <None Include="LifeQuest - Copy.BLL.csproj" />
-  </ItemGroup>
 
 </Project>
