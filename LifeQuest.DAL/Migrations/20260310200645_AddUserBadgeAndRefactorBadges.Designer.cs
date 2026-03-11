@@ -4,6 +4,7 @@ using LifeQuest.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LifeQuest.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260310200645_AddUserBadgeAndRefactorBadges")]
+    partial class AddUserBadgeAndRefactorBadges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,12 +290,7 @@ namespace LifeQuest.DAL.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Decisions");
                 });
@@ -406,16 +404,13 @@ namespace LifeQuest.DAL.Migrations
 
             modelBuilder.Entity("LifeQuest.DAL.Models.UserChallenge", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ApplicationUserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("ChallengeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateAt")
@@ -426,6 +421,9 @@ namespace LifeQuest.DAL.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -443,17 +441,11 @@ namespace LifeQuest.DAL.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "ChallengeId");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ChallengeId");
-
-                    b.HasIndex("UserId", "ChallengeId")
-                        .IsUnique();
 
                     b.ToTable("UserChallenges");
                 });
@@ -490,7 +482,8 @@ namespace LifeQuest.DAL.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("LevelId");
+                    b.HasIndex("LevelId")
+                        .IsUnique();
 
                     b.ToTable("UserProfiles");
                 });
@@ -658,23 +651,13 @@ namespace LifeQuest.DAL.Migrations
                     b.HasOne("LifeQuest.DAL.Models.UserChallenge", "UserChallenge")
                         .WithMany()
                         .HasForeignKey("UserChallengeId")
+                        .HasPrincipalKey("Id")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Challenge");
 
                     b.Navigation("UserChallenge");
-                });
-
-            modelBuilder.Entity("LifeQuest.DAL.Models.Decision", b =>
-                {
-                    b.HasOne("LifeQuest.DAL.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LifeQuest.DAL.Models.MetricsCalc", b =>
@@ -710,7 +693,7 @@ namespace LifeQuest.DAL.Migrations
             modelBuilder.Entity("LifeQuest.DAL.Models.UserChallenge", b =>
                 {
                     b.HasOne("LifeQuest.DAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("UserChallenges")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("LifeQuest.DAL.Models.Challenge", "Challenge")
@@ -727,8 +710,8 @@ namespace LifeQuest.DAL.Migrations
             modelBuilder.Entity("LifeQuest.DAL.Models.UserProfile", b =>
                 {
                     b.HasOne("LifeQuest.DAL.Models.Level", "Level")
-                        .WithMany()
-                        .HasForeignKey("LevelId")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("LifeQuest.DAL.Models.UserProfile", "LevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -798,8 +781,6 @@ namespace LifeQuest.DAL.Migrations
                 {
                     b.Navigation("UserBadges");
 
-                    b.Navigation("UserChallenges");
-
                     b.Navigation("UserProfile");
                 });
 
@@ -821,6 +802,11 @@ namespace LifeQuest.DAL.Migrations
             modelBuilder.Entity("LifeQuest.DAL.Models.Decision", b =>
                 {
                     b.Navigation("Metrics");
+                });
+
+            modelBuilder.Entity("LifeQuest.DAL.Models.Level", b =>
+                {
+                    b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618
         }

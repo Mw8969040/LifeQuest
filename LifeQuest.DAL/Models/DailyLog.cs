@@ -12,11 +12,17 @@ namespace LifeQuest.DAL.Models
 
         public int CurrentProgress { get; set; }
 
-        [ForeignKey("Challenge")]
         public int ChallengeId { get; set; }
 
         public Challenge? Challenge { get; set; }
 
+        [ForeignKey("UserChallenge")]
+        public int UserChallengeId { get; set; }
+
+        public UserChallenge? UserChallenge { get; set; }
+
         public string Notes { get; set; } = string.Empty;
+
+        public DateTime LogDate { get; set; } = DateTime.Now;
     }
 }

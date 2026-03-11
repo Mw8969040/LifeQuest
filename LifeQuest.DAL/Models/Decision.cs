@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LifeQuest.DAL.Models
 {
@@ -14,5 +15,10 @@ namespace LifeQuest.DAL.Models
         public bool IsSuccess { get; set; }
 
         public MetricsCalc? Metrics { get; set; }
+
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public ApplicationUser? User { get; set; }
     }
 }

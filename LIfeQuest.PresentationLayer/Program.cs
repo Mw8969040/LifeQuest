@@ -5,6 +5,7 @@ using LifeQuest.DAL.UOW.Implementation;
 using LifeQuest.DAL.UOW.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using LifeQuest.BLL.Mapping;
 
 namespace LIfeQuest.PresentationLayer
 {
@@ -19,6 +20,9 @@ namespace LIfeQuest.PresentationLayer
 
             // UOW Di 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // AutoMapper Di
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // ApplicationDb Context Di
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()

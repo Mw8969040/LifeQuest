@@ -19,6 +19,7 @@ namespace LifeQuest.DAL.Data
         public DbSet<MetricsCalc> Metrics { get; set; } = null!;
         public DbSet<Decision> Decisions { get; set; } = null!;
         public DbSet<Level> Levels { get; set; } = null!;
+        public DbSet<UserBadge> UserBadges { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,13 +28,16 @@ namespace LifeQuest.DAL.Data
                 .WithOne(up => up.User)
                 .HasForeignKey<UserProfile>(up => up.UserId);
 
+            // UserChallenge uses Id as PK (required by DailyLog FK)
             modelBuilder.Entity<UserChallenge>()
-                .HasKey(uc => new { uc.UserId, uc.ChallengeId });
+                .HasIndex(uc => new { uc.UserId, uc.ChallengeId })
+                .IsUnique();
 
+            // Many UserProfiles can share the same Level
             modelBuilder.Entity<UserProfile>()
                 .HasOne(up => up.Level)
-                .WithOne(l => l.UserProfile)
-                .HasForeignKey<UserProfile>(up => up.LevelId);
+                .WithMany()
+                .HasForeignKey(up => up.LevelId);
 
             modelBuilder.Entity<Challenge>().HasQueryFilter(X => !X.IsDeleted);
             modelBuilder.Entity<Badges>().HasQueryFilter(X => !X.IsDeleted);
@@ -45,10 +49,21 @@ namespace LifeQuest.DAL.Data
             modelBuilder.Entity<MetricsCalc>().HasQueryFilter(X => !X.IsDeleted);
             modelBuilder.Entity<UserChallenge>().HasQueryFilter(X => !X.IsDeleted);
             modelBuilder.Entity<UserProfile>().HasQueryFilter(X => !X.IsDeleted);
+            modelBuilder.Entity<UserBadge>().HasQueryFilter(X => !X.IsDeleted);
 
+            modelBuilder.Entity<DailyLog>()
+                .HasOne(dl => dl.UserChallenge)
+                .WithMany()
+                .HasForeignKey(dl => dl.UserChallengeId)
+                .HasPrincipalKey(uc => uc.Id)
+                .OnDelete(DeleteBehavior.NoAction);
 
-
-
+            // Decision belongs to a User
+            modelBuilder.Entity<Decision>()
+                .HasOne(d => d.User)
+                .WithMany()
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
         }

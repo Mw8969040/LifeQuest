@@ -14,5 +14,8 @@ namespace LifeQuest.DAL.Models
         public string Country { get; set; } = string.Empty;
 
         public UserProfile? UserProfile { get; set; }
+
+        public HashSet<UserBadge> UserBadges { get; set; } = new();
+        public HashSet<UserChallenge> UserChallenges { get; set; } = new();
     }
 }

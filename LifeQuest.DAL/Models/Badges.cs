@@ -13,7 +13,6 @@ namespace LifeQuest.DAL.Models
         public int Points { get; set; }
 
         public string Image { get; set; } = string.Empty;
-
-        public HashSet<UserChallenge> UserChallenges { get; set; } = new();
+        public HashSet<UserBadge> UserBadges { get; set; } = new();
     }
 }

@@ -9,6 +9,5 @@ namespace LifeQuest.DAL.Models
         // Points required to gain this level
         public int Point { get; set; }
 
-        public UserProfile? UserProfile { get; set; }
     }
 }

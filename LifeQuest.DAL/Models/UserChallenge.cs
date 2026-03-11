@@ -19,10 +19,7 @@ namespace LifeQuest.DAL.Models
             ErrorMessage = "Status must be Ended, InProgress, or NotStarted")]
         public string Status { get; set; } = string.Empty;
 
-        [ForeignKey("Badge")]
-        public int BadgeId { get; set; }
-
-        public Badges? Badge { get; set; }
+        public int CurrentProgress { get; set; }
 
         public DateTime StartDate { get; set; }
 
