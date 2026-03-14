@@ -19,31 +19,31 @@ namespace LifeQuest.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<LevelDto>> GetAllLevelsAsync()
+        public async Task<IEnumerable<LevelDTO>> GetAllLevelsAsync()
         {
-            // جلب كل المستويات
+            // هجيب كل ال Levels اللى عندى فى السيستم
             var levels = await _unitOfWork.Repository<Level>().GetAllAsync();
-            return _mapper.Map<IEnumerable<LevelDto>>(levels);
+            return _mapper.Map<IEnumerable<LevelDTO>>(levels);
         }
 
-        public async Task<LevelDto?> GetLevelByIdAsync(int id)
+        public async Task<LevelDTO?> GetLevelByIdAsync(int id)
         {
-            // جلب مستوى معين بال ID
+            // هبحث عن Level معين بال ID بتاعه
             var level = await _unitOfWork.Repository<Level>().GetByIdAsync(id);
-            return _mapper.Map<LevelDto>(level);
+            return _mapper.Map<LevelDTO>(level);
         }
 
-        public async Task<bool> AddLevelAsync(LevelDto dto)
+        public async Task<bool> AddLevelAsync(LevelDTO dto)
         {
-            // اضافه مستوى جديد
+            // هضيف Level جديد عشان المستخدمين يوصلوله
             var level = _mapper.Map<Level>(dto);
             await _unitOfWork.Repository<Level>().AddAsync(level);
             return await _unitOfWork.CompleteAsync() > 0;
         }
 
-        public async Task<bool> UpdateLevelAsync(LevelDto dto)
+        public async Task<bool> UpdateLevelAsync(LevelDTO dto)
         {
-            // تحديث بيانات المستوى
+            // هعدل الداتا بتاعة ال Level اللى جايلى
             var level = _mapper.Map<Level>(dto);
             _unitOfWork.Repository<Level>().Update(level);
             return await _unitOfWork.CompleteAsync() > 0;
@@ -51,7 +51,7 @@ namespace LifeQuest.BLL.Services.Implementation
 
         public async Task<bool> DeleteLevelAsync(int id)
         {
-            // حذف المستوى
+            // هحذف ال Level ده خالص
             await _unitOfWork.Repository<Level>().Delete(id);
             return await _unitOfWork.CompleteAsync() > 0;
         }

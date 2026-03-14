@@ -6,10 +6,10 @@ namespace LifeQuest.BLL.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
-        Task<CategoryDto?> GetCategoryByIdAsync(int id);
-        Task<bool> CreateCategoryAsync(CategoryDto dto);
-        Task<bool> UpdateCategoryAsync(CategoryDto dto);
+        Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync();
+        Task<CategoryDTO?> GetCategoryByIdAsync(int id);
+        Task<bool> CreateCategoryAsync(CategoryDTO dto);
+        Task<bool> UpdateCategoryAsync(CategoryDTO dto);
         Task<bool> DeleteCategoryAsync(int id);
     }
 }

@@ -21,12 +21,12 @@ namespace LifeQuest.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task CreateChallengeAsync(ChallengeDto dto)
+        public async Task CreateChallengeAsync(ChallengeDTO dto)
         {
-            // انشاء تحدى جديد
+            // هيكرت تحدى جديد
             var challenge = _mapper.Map<Challenge>(dto);
             
-            // تعيين بعض القيم الافتراضية او المحسوبة إذا لم تكن موجودة في DTO
+            // هنا لو ال DTO مفيهوش قيم معينه، هحط انا ديفولت من عندى او هحسبها
             challenge.CategoryId = dto.CategoryId == 0 ? 1 : dto.CategoryId; // Default to 1 for now if not set
             challenge.Duration = (dto.EndDate - dto.StartDate).Days;
             
@@ -34,23 +34,23 @@ namespace LifeQuest.BLL.Services.Implementation
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<List<ChallengeDto>> GetAllChallengesAsync()
+        public async Task<List<ChallengeDTO>> GetAllChallengesAsync()
         {
-            // جلب كل التحديات مع بيانات القسم
+            // هجيب كل التحديات اللى فى السيستم ومعاهم ال Category كمان
             var challenges = await _unitOfWork.Repository<Challenge>().GetAllWithIncludesAsync(c => true, "Category");
-            return _mapper.Map<List<ChallengeDto>>(challenges.ToList());
+            return _mapper.Map<List<ChallengeDTO>>(challenges.ToList());
         }
 
-        public async Task<ChallengeDto?> GetChallengeByIdAsync(int id)
+        public async Task<ChallengeDTO?> GetChallengeByIdAsync(int id)
         {
-            // جلب تحدى معين بال ID مع بيانات القسم
+            // هجيب تحدى واحد بس بال ID بتاعه وبالمرة ال Category بتاعته
             var challenge = await _unitOfWork.Repository<Challenge>().GetByIdWithIncludeAsync(c => c.Id == id, "Category");
-            return _mapper.Map<ChallengeDto>(challenge);
+            return _mapper.Map<ChallengeDTO>(challenge);
         }
 
-        public async Task<bool> UpdateChallengeAsync(ChallengeDto dto)
+        public async Task<bool> UpdateChallengeAsync(ChallengeDTO dto)
         {
-            // تحديث بيانات التحدى
+            // هعدل بيانات التحدى اللى جايلى
             var challenge = _mapper.Map<Challenge>(dto);
             challenge.Duration = (dto.EndDate - dto.StartDate).Days;
             _unitOfWork.Repository<Challenge>().Update(challenge);
@@ -59,18 +59,18 @@ namespace LifeQuest.BLL.Services.Implementation
 
         public async Task<bool> DeleteChallengeAsync(int id)
         {
-            // حذف التحدى
+            // هسمح للمستخدم يمسح التحدى خالص بال ID بتاعه
             await _unitOfWork.Repository<Challenge>().Delete(id);
             return await _unitOfWork.CompleteAsync() > 0;
         }
 
-        public async Task<IEnumerable<ChallengeDto>> GetChallengesByCategoryAsync(int categoryId)
+        public async Task<IEnumerable<ChallengeDTO>> GetChallengesByCategoryAsync(int categoryId)
         {
-            // جلب التحديات التابعه لقسم معين
+            // هجيب كل التحديات اللى تبع Category معينة
             var challenges = await _unitOfWork.Repository<Challenge>()
                 .GetAllWithIncludesAsync(c => c.CategoryId == categoryId, "Category");
             
-            return _mapper.Map<IEnumerable<ChallengeDto>>(challenges);
+            return _mapper.Map<IEnumerable<ChallengeDTO>>(challenges);
         }
     }
 }

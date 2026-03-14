@@ -23,28 +23,50 @@ namespace LifeQuest.BLL.Mapping
                 .ForMember(dest => dest.Challenge , opt => opt.Ignore());
 
             // Category Mappings
-            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<CategoryDTO, Category>()
+                .ForMember(dest => dest.Challenges, opt => opt.Ignore());
 
             // Challenge Mappings
-            CreateMap<Challenge, ChallengeDto>().ReverseMap();
+            CreateMap<Challenge, ChallengeDTO>().ReverseMap();
+            CreateMap<ChallengeDTO, Challenge>()
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+                .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore())
+                .ForMember(dest => dest.DailyLogs, opt => opt.Ignore());
 
             // UserBadge Mappings
             CreateMap<UserBadge, UserBadgeDTO>()
                 .ForMember(dest => dest.BadgeName, opt => opt.MapFrom(src => src.Badge.Name));
             CreateMap<UserBadgeDTO, UserBadge>()
-                .ForMember(dest => dest.Badge, opt => opt.Ignore());
+                .ForMember(dest => dest.Badge, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore());
 
             // Badge Mappings
             CreateMap<Badges, BadgeDTO>().ReverseMap();
+            CreateMap<BadgeDTO, Badges>()
+                .ForMember(dest => dest.UserBadges, opt => opt.Ignore());
 
             // Level Mappings
-            CreateMap<Level, LevelDto>().ReverseMap();
+            CreateMap<Level, LevelDTO>().ReverseMap();
 
             // Decision Mappings
-            CreateMap<Decision, DecisionDto>().ReverseMap();
+            CreateMap<Decision, DecisionDTO>().ReverseMap();
+            CreateMap<DecisionDTO, Decision>()
+                .ForMember(dest => dest.Metrics, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore());
+
+            // UserProfile Mappings
+            CreateMap<UserProfile, UserProfileDTO>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.LevelName, opt => opt.MapFrom(src => src.Level.LevelName))
+                .ForMember(dest => dest.TotalBadges, opt => opt.Ignore())
+                .ForMember(dest => dest.ActiveChallenges, opt => opt.Ignore())
+                .ForMember(dest => dest.RemainingPointsForNextLevel, opt => opt.Ignore());
 
             // Metrics Mappings
-            CreateMap<MetricsCalc, MetricsCalcDto>().ReverseMap();
+            CreateMap<MetricsCalc, MetricsCalcDTO>().ReverseMap();
+            CreateMap<MetricsCalcDTO, MetricsCalc>()
+                .ForMember(dest => dest.Decision, opt => opt.Ignore());
         }
     }
 }

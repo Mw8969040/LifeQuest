@@ -2,7 +2,7 @@ using System;
 
 namespace LifeQuest.BLL.DTOs
 {
-    public class LevelDto
+    public class LevelDTO
     {
         public int Id { get; set; }
         public int LevelsCount { get; set; }

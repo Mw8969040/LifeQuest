@@ -18,7 +18,7 @@ namespace LifeQuest.BLL.Services.Implementation
 
         public async Task<MetricsCalc> CalculateUserMetricsAsync(int userId, int decisionId)
         {
-            // جلب كل قرارات المستخدم للتحليل
+            // هجيب كل القرارات اللى المستخدم عملها عشان نحللها
             var decisions = await _unitOfWork.Repository<Decision>()
                 .GetAllWithIncludesAsync(d => d.UserId == userId);
 
@@ -30,10 +30,10 @@ namespace LifeQuest.BLL.Services.Implementation
             int totalDecisions = decisions.Count();
             int successfulDecisions = decisions.Count(d => d.IsSuccess);
             
-            // 1️⃣ Success Rate
+            // 1️⃣ نسبة النجاح العامة
             int successRate = (int)((double)successfulDecisions / totalDecisions * 100);
 
-            // 2️⃣ Confidence Accuracy
+            // 2️⃣ دقة الثقة (هل لما بيبقى واثق بيطلع صح فعلاً؟)
             var confidentDecisions = decisions.Where(d => d.IsConfident);
             int confidenceAccuracy = 0;
             if (confidentDecisions.Any())
@@ -42,12 +42,12 @@ namespace LifeQuest.BLL.Services.Implementation
                 confidenceAccuracy = (int)((double)successfulConfident / confidentDecisions.Count() * 100);
             }
 
-            // 3️⃣ OverConfidence Index
+            // 3️⃣ مؤشر الثقة الزايدة (كام مرة كان واثق وفشل؟)
             int failedConfident = confidentDecisions.Count(d => !d.IsSuccess);
             int overConfidenceIndex = (int)((double)failedConfident / totalDecisions * 100);
 
-            // 4️⃣ Risk Pattern
-            // نحسب النسبة المئوية للقرارات ذات المخاطرة العالية
+            // 4️⃣ نمط المخاطرة
+            // هنا بنحسب هو بيختار قرارات صعبة (Hard) بنسبة قد إيه
             int hardDecisions = decisions.Count(d => d.RiskLevel == "Hard");
             int riskPattern = (int)((double)hardDecisions / totalDecisions * 100);
 

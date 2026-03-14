@@ -2,7 +2,7 @@ using System;
 
 namespace LifeQuest.BLL.DTOs
 {
-    public class DecisionDto
+    public class DecisionDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -10,6 +10,6 @@ namespace LifeQuest.BLL.DTOs
         public bool IsSuccess { get; set; }
         public string RiskLevel { get; set; } = "Medium";
         public int UserId { get; set; }
-        public MetricsCalcDto? Metrics { get; set; }
+        public MetricsCalcDTO? Metrics { get; set; }
     }
 }

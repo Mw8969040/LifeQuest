@@ -6,10 +6,10 @@ namespace LifeQuest.BLL.Services.Interfaces
 {
     public interface ILevelService
     {
-        Task<IEnumerable<LevelDto>> GetAllLevelsAsync();
-        Task<LevelDto?> GetLevelByIdAsync(int id);
-        Task<bool> AddLevelAsync(LevelDto dto);
-        Task<bool> UpdateLevelAsync(LevelDto dto);
+        Task<IEnumerable<LevelDTO>> GetAllLevelsAsync();
+        Task<LevelDTO?> GetLevelByIdAsync(int id);
+        Task<bool> AddLevelAsync(LevelDTO dto);
+        Task<bool> UpdateLevelAsync(LevelDTO dto);
         Task<bool> DeleteLevelAsync(int id);
     }
 }

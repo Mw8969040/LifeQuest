@@ -51,9 +51,7 @@ namespace LifeQuest.DAL.Repositories.Implementation
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet
-                .AsNoTracking()
-                .ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
         public Task<IPagedList<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate, params string[] Includes)

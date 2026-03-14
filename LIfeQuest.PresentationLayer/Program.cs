@@ -26,8 +26,8 @@ namespace LIfeQuest.PresentationLayer
             // AutoMapper Di
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            // Challenge Service Di
-            builder.Services.AddScoped<IChallengeService, ChallengeService>();
+            // Metrics Service Di
+            builder.Services.AddScoped<IMetricsCalcService, MetricsCalcService>();
 
             // ApplicationDb Context Di
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()

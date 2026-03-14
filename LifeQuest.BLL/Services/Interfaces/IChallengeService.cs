@@ -6,11 +6,11 @@ namespace LifeQuest.BLL.Services.Interfaces
 {
     public interface IChallengeService
     {
-        public Task CreateChallengeAsync(ChallengeDto dto);
-        public Task<List<ChallengeDto>> GetAllChallengesAsync();
-        public Task<ChallengeDto?> GetChallengeByIdAsync(int id);
-        public Task<bool> UpdateChallengeAsync(ChallengeDto dto);
+        public Task CreateChallengeAsync(ChallengeDTO dto);
+        public Task<List<ChallengeDTO>> GetAllChallengesAsync();
+        public Task<ChallengeDTO?> GetChallengeByIdAsync(int id);
+        public Task<bool> UpdateChallengeAsync(ChallengeDTO dto);
         public Task<bool> DeleteChallengeAsync(int id);
-        public Task<IEnumerable<ChallengeDto>> GetChallengesByCategoryAsync(int categoryId);
+        public Task<IEnumerable<ChallengeDTO>> GetChallengesByCategoryAsync(int categoryId);
     }
 }

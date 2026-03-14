@@ -2,7 +2,7 @@ using System;
 
 namespace LifeQuest.BLL.DTOs
 {
-    public class MetricsCalcDto
+    public class MetricsCalcDTO
     {
         public int Id { get; set; }
         public int SuccessRate { get; set; }
