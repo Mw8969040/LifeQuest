@@ -69,10 +69,11 @@ namespace LifeQuest.BLL.Services.Implementation
             {
                 userProfile.TotalPoints += points;
                 _unitOfWork.Repository<UserProfile>().Update(userProfile);
-                await _unitOfWork.CompleteAsync();
-
+                
                 // هعمل تشيك على الليفل بعد ما زودنا النقاط
                 await CheckLevelUpAsync(userId);
+                
+                await _unitOfWork.CompleteAsync();
             }
         }
 
@@ -112,7 +113,7 @@ namespace LifeQuest.BLL.Services.Implementation
                 {
                     userProfile.LevelId = nextLevel.Id;
                     _unitOfWork.Repository<UserProfile>().Update(userProfile);
-                    await _unitOfWork.CompleteAsync();
+                    // هنا مش هنعمل CompleteAsync عشان لو الميثود دي اتنادت من جوا AddPoints يبقى السيف يحصل مرة واحدة
                 }
             }
         }

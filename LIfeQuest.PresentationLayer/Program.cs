@@ -26,7 +26,16 @@ namespace LIfeQuest.PresentationLayer
             // AutoMapper Di
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            // Metrics Service Di
+            // BLL Services DI
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IChallengeService, ChallengeService>();
+            builder.Services.AddScoped<IDailyLogService, DailyLogService>();
+            builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<ILevelService, LevelService>();
+            builder.Services.AddScoped<IBadgeService, BadgeService>();
+            builder.Services.AddScoped<IUserBadgeService, UserBadgeService>();
+            builder.Services.AddScoped<IUserChallengeService, UserChallengeService>();
+            builder.Services.AddScoped<IDecisionService, DecisionService>();
             builder.Services.AddScoped<IMetricsCalcService, MetricsCalcService>();
 
             // ApplicationDb Context Di

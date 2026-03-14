@@ -34,7 +34,9 @@ namespace LifeQuest.BLL.Services.Implementation
             decision.UpdateAt = DateTime.Now;
 
             await _unitOfWork.Repository<Decision>().AddAsync(decision);
-            await _unitOfWork.CompleteAsync(); // هسيف القرار الاول عشان اخد ال ID بتاعه للمؤشرات
+            
+            // هحتاج اسيف القرار هنا عشان اخد ال ID بتاعه للمؤشرات (لان ال ID بيطلع من الداتابيز)
+            await _unitOfWork.CompleteAsync();
 
             // هحسب بقا ال Metrics ونحفظها
             var metrics = await _metricsService.CalculateUserMetricsAsync(dto.UserId, decision.Id);
@@ -53,7 +55,6 @@ namespace LifeQuest.BLL.Services.Implementation
             decision.IsSuccess = isSuccess;
             decision.UpdateAt = DateTime.Now;
             _unitOfWork.Repository<Decision>().Update(decision);
-            await _unitOfWork.CompleteAsync();
 
             // لازم نحدث المؤشرات تانى بعد ما النتيجة اتغيرت
             var metrics = await _metricsService.CalculateUserMetricsAsync(decision.UserId, decision.Id);
@@ -74,6 +75,7 @@ namespace LifeQuest.BLL.Services.Implementation
                 await _unitOfWork.Repository<MetricsCalc>().AddAsync(metrics);
             }
 
+            // هعمل سيف مرة واحدة لكل التعديلات
             return await _unitOfWork.CompleteAsync() > 0;
         }
 

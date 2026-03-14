@@ -6,7 +6,7 @@ using LifeQuest.DAL.UOW.Interface;
 
 namespace LifeQuest.BLL.Services.Implementation
 {
-    internal class UserChallengeService : IUserChallengeService
+    public class UserChallengeService : IUserChallengeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
