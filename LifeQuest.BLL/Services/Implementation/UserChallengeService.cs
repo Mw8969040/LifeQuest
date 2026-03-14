@@ -1,13 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using LifeQuest.BLL.DTOs;
 using LifeQuest.BLL.Services.Interfaces;
 using LifeQuest.DAL.Models;
 using LifeQuest.DAL.UOW.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LifeQuest.BLL.Services.Implementation
 {
@@ -21,30 +16,65 @@ namespace LifeQuest.BLL.Services.Implementation
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public Task<UserChallengeDTO> GetChallengeDetailsAsync(int userId)
+        public async Task<UserChallengeDTO> GetChallengeDetailsAsync(int userId , int challengeId)
         {
-            throw new NotImplementedException();
+            var userChallenge =await _unitOfWork.Repository<UserChallenge>()
+                .GetByIdWithIncludeAsync(X => X.UserId == userId && X.ChallengeId == challengeId , "Challenge");
+
+            if(userChallenge == null)
+            {
+                throw new Exception("User not registered in this challenge");
+            }
+
+            var userChallengeDTO = _mapper.Map<UserChallengeDTO>(userChallenge);
+
+            return userChallengeDTO;
         }
 
-        public Task<IEnumerable<UserChallengeDTO>> GetUserChallengesAsync(int userId)
+        public async Task<IEnumerable<UserChallengeDTO>> GetUserChallengesAsync(int userId)
         {
-            throw new NotImplementedException();
+            var challengesOfUser =await _unitOfWork.Repository<UserChallenge>()
+                .GetAllWithIncludesAsync(X => X.UserId == userId, "Challenge");
+
+            var challengesOfUserDTO = _mapper.Map<IEnumerable<UserChallengeDTO>>(challengesOfUser);
+
+            return challengesOfUserDTO;
         }
 
-        public Task JoinChallengeAsync(int userId, int ChallengeId)
+        public async Task JoinChallengeAsync(int userId, int challengeId)
         {
-            var user = _unitOfWork.Repository<ApplicationUser>().GetByIdAsync(userId);
+            var user = await _unitOfWork.Repository<ApplicationUser>().GetByIdAsync(userId);
 
             if (user == null) throw new KeyNotFoundException("User accounts was not found.");
 
-            var challenge = _unitOfWork.Repository<Challenge>().GetByIdAsync(ChallengeId);
+            var challenge = await _unitOfWork.Repository<Challenge>().GetByIdAsync(challengeId);
 
             if (challenge == null) throw new KeyNotFoundException("The selected challenge no longer exists.");
 
+            var isChallengeExist = await _unitOfWork.Repository<UserChallenge>()
+              .AnyAsync(X => X.UserId == userId && X.ChallengeId == challengeId);
 
-            return null;
+            if (isChallengeExist)
+                throw new InvalidOperationException("You are already joined this challenge.");
 
+            var userChallenge = new UserChallenge
+            {
+                ChallengeId = challengeId,
+                UserId = userId,
+                StartDate = DateTime.Now,
+                Status = "NoStarted",
+                CurrentProgress = 0,
+                IsSuccess = false,
+            };
 
+            await _unitOfWork.Repository<UserChallenge>().AddAsync(userChallenge);
+
+            int result = await _unitOfWork.CompleteAsync();
+
+            if(result <= 0)
+            {
+                throw new Exception("An error occurred while joining the challenge.");
+            }
         }
     }
 }

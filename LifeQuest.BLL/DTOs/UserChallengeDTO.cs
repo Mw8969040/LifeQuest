@@ -12,6 +12,8 @@ namespace LifeQuest.BLL.DTOs
 
         public int ChallengeId { get; set; }
 
+        public int UserId { get; set; }
+
         public string ChallengeName { get; set; }
 
         public string Status { get; set; }

@@ -1,10 +1,11 @@
+@model IEnumerable<LIfeQuest.PresentationLayer.ViewModels.Challenges.ChallengeViewModel>
 @{
     ViewData["Title"] = "Challenges";
 }
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Explore Challenges</h1>
-    <a href="/Challenges/Create" class="btn btn-primary shadow-sm">
+    <a asp-action="Create" class="btn btn-primary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50 me-2"></i> Create New
     </a>
 </div>
@@ -12,10 +13,7 @@
 <!-- Tabs -->
 <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active fw-bold px-4" id="pills-my-tab" data-bs-toggle="pill" data-bs-target="#pills-my" type="button" role="tab">My Challenges</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link fw-bold px-4" id="pills-public-tab" data-bs-toggle="pill" data-bs-target="#pills-public" type="button" role="tab">Public Challenges</button>
+    <button class="nav-link active fw-bold px-4" id="pills-my-tab" data-bs-toggle="pill" data-bs-target="#pills-my" type="button" role="tab">Active Challenges</button>
   </li>
 </ul>
 
@@ -23,107 +21,48 @@
   <!-- My Challenges Tab -->
   <div class="tab-pane fade show active" id="pills-my" role="tabpanel">
     <div class="row">
-        <!-- Challenge Card 1 -->
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card h-100 border-start border-info border-5">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-info fw-bold small"><i class="fas fa-laptop-code me-1"></i> Technical</span>
-                        <span class="badge bg-danger-subtle text-danger border border-danger">Hard</span>
-                    </div>
-                    <h5 class="fw-bold">Learn .NET 10</h5>
-                    <p class="text-muted small">Consistency: 4 days remaining</p>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small fw-bold">Progress</span>
-                            <span class="small">65%</span>
-                        </div>
-                        <div class="progress mb-3">
-                            <div class="progress-bar bg-info" style="width: 65%"></div>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a href="/Challenges/Details" class="btn btn-primary btn-sm flex-grow-1">View Details</a>
-                            <button class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i></button>
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-tasks fa-3x text-gray-300 mb-3"></i>
+                <p class="text-muted">No challenges found. Create one to get started!</p>
+                <a asp-action="Create" class="btn btn-primary">Create Your First Challenge</a>
+            </div>
+        }
+        else
+        {
+            @foreach (var challenge in Model)
+            {
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card h-100 border-start border-@(challenge.Difficulty == "Hard" ? "danger" : challenge.Difficulty == "Medium" ? "warning" : "success") border-5">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-primary fw-bold small"><i class="fas fa-trophy me-1"></i> @(challenge.IsPublic ? "Public" : "Private")</span>
+                                <span class="badge bg-@(challenge.Difficulty == "Hard" ? "danger" : challenge.Difficulty == "Medium" ? "warning" : "success")-subtle text-@(challenge.Difficulty == "Hard" ? "danger" : challenge.Difficulty == "Medium" ? "warning" : "success") border border-@(challenge.Difficulty == "Hard" ? "danger" : challenge.Difficulty == "Medium" ? "warning" : "success")">
+                                    @challenge.Difficulty
+                                </span>
+                            </div>
+                            <h5 class="fw-bold">@challenge.Title</h5>
+                            <p class="text-muted small">Points: <span class="fw-bold text-warning">@challenge.Points</span> | Duration: @challenge.Duration days</p>
+                            <p class="text-muted small">@challenge.Description</p>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="small fw-bold">Timeline</span>
+                                    <span class="small">@challenge.StartDate.ToString("MMM dd") - @challenge.EndDate.ToString("MMM dd")</span>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Details" asp-route-id="@challenge.Id" class="btn btn-primary btn-sm flex-grow-1">View Details</a>
+                                    <button class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Challenge Card 2 -->
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card h-100 border-start border-success border-5">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-success fw-bold small"><i class="fas fa-running me-1"></i> Health</span>
-                        <span class="badge bg-success-subtle text-success border border-success">Easy</span>
-                    </div>
-                    <h5 class="fw-bold">Daily 5km Run</h5>
-                    <p class="text-muted small">Consistency: 22 days remaining</p>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small fw-bold">Progress</span>
-                            <span class="small">20%</span>
-                        </div>
-                        <div class="progress mb-3">
-                            <div class="progress-bar bg-success" style="width: 20%"></div>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a href="#" class="btn btn-primary btn-sm flex-grow-1">View Details</a>
-                            <button class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
-
-  <!-- Public Challenges Tab -->
-  <div class="tab-pane fade" id="pills-public" role="tabpanel">
-    <div class="row">
-        <!-- Public Challenge 1 -->
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-warning fw-bold small"><i class="fas fa-book me-1"></i> Education</span>
-                        <span class="badge bg-warning-subtle text-warning border border-warning">Medium</span>
-                    </div>
-                    <h5 class="fw-bold">Read 12 Books</h5>
-                    <p class="text-muted small">Duration: 365 Days</p>
-                    <div class="d-flex align-items-center mb-3">
-                         <div class="avatar-group d-flex">
-                            <img src="https://ui-avatars.com/api/?name=User1&size=24" class="rounded-circle border border-white" style="margin-right: -8px;">
-                            <img src="https://ui-avatars.com/api/?name=User2&size=24" class="rounded-circle border border-white" style="margin-right: -8px;">
-                            <img src="https://ui-avatars.com/api/?name=User3&size=24" class="rounded-circle border border-white">
-                        </div>
-                        <span class="small text-muted ms-2">+120 others joined</span>
-                    </div>
-                    <a href="/Challenges/Join" class="btn btn-success btn-sm w-100">Join Challenge</a>
-                </div>
-            </div>
-        </div>
-        <!-- Public Challenge 2 -->
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-primary fw-bold small"><i class="fas fa-palette me-1"></i> Art</span>
-                        <span class="badge bg-success-subtle text-success border border-success">Easy</span>
-                    </div>
-                    <h5 class="fw-bold">Daily Sketching</h5>
-                    <p class="text-muted small">Duration: 30 Days</p>
-                    <div class="d-flex align-items-center mb-3">
-                         <div class="avatar-group d-flex">
-                            <img src="https://ui-avatars.com/api/?name=A&size=24" class="rounded-circle border border-white" style="margin-right: -8px;">
-                            <img src="https://ui-avatars.com/api/?name=B&size=24" class="rounded-circle border border-white">
-                        </div>
-                        <span class="small text-muted ms-2">+45 others joined</span>
-                    </div>
-                    <a href="/Challenges/Join" class="btn btn-success btn-sm w-100">Join Challenge</a>
-                </div>
-            </div>
-        </div>
+            }
+        }
     </div>
   </div>
 </div>

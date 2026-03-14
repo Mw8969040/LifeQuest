@@ -14,6 +14,8 @@ namespace LifeQuest.DAL.Models
         [Required]
         public bool IsSuccess { get; set; }
 
+        public string RiskLevel { get; set; } = "Medium"; // Easy, Medium, Hard
+
         public MetricsCalc? Metrics { get; set; }
 
         public int UserId { get; set; }

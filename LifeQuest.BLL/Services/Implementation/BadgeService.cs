@@ -1,23 +1,61 @@
-﻿using LifeQuest.BLL.DTOs;
+using AutoMapper;
+using LifeQuest.BLL.DTOs;
 using LifeQuest.BLL.Services.Interfaces;
+using LifeQuest.DAL.Models;
+using LifeQuest.DAL.UOW.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LifeQuest.BLL.Services.Implementation
 {
-    internal class BadgeService : IBadgeService
+    public class BadgeService : IBadgeService
     {
-        public Task<IEnumerable<BadgeDTO>> GetAllBadgesAsync()
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public BadgeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public Task<BadgeDTO> GetBadgeByIdAsync(int id)
+        public async Task AddBadgeAsync(BadgeDTO dto)
         {
-            throw new NotImplementedException();
+            // اضافه وسام جديد
+            var badge = _mapper.Map<Badges>(dto);
+            await _unitOfWork.Repository<Badges>().AddAsync(badge);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task DeleteBadgeAsync(int id)
+        {
+            // حذف وسام
+            await _unitOfWork.Repository<Badges>().Delete(id);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task<IEnumerable<BadgeDTO>> GetAllBadgesAsync()
+        {
+            // جلب كل الاوسمه
+            var badges = await _unitOfWork.Repository<Badges>().GetAllAsync();
+            return _mapper.Map<IEnumerable<BadgeDTO>>(badges);
+        }
+
+        public async Task<BadgeDTO> GetBadgeByIdAsync(int id)
+        {
+            // جلب وسام معين بال ID
+            var badge = await _unitOfWork.Repository<Badges>().GetByIdAsync(id);
+            return _mapper.Map<BadgeDTO>(badge);
+        }
+
+        public async Task UpdateBadgeAsync(BadgeDTO dto)
+        {
+            // تحديث بيانات الوسام
+            var badge = _mapper.Map<Badges>(dto);
+            _unitOfWork.Repository<Badges>().Update(badge);
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

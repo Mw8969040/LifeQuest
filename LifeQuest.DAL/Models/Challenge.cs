@@ -18,6 +18,15 @@ namespace LifeQuest.DAL.Models
         public Category? Category { get; set; }
 
         [Required]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        public DateTime EndDate { get; set; }
+
+        [Required]
+        public int Points { get; set; }
+
+        [Required]
         public int Duration { get; set; }
 
         [Required]

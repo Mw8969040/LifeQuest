@@ -11,6 +11,6 @@ namespace LifeQuest.BLL.Services.Interfaces
     {
         public Task JoinChallengeAsync(int userId, int ChallengeId);   
         Task<IEnumerable<UserChallengeDTO>> GetUserChallengesAsync(int userId);
-        public Task<UserChallengeDTO> GetChallengeDetailsAsync(int userId);
+        public Task<UserChallengeDTO> GetChallengeDetailsAsync(int userId , int challengeId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ namespace LifeQuest.BLL.DTOs
         public int UserId { get; set; }
 
         public int BadgeId { get; set; }
+        public string BadgeName { get; set; } = string.Empty;
 
         public DateTime AwardedDate { get; set; }
 

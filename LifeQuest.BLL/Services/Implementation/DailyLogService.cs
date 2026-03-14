@@ -108,7 +108,7 @@ namespace LifeQuest.BLL.Services.Implementation
         {
             // هنا هجيب كل التسجيلات المرتطبطه بالمستخدم فى يوم او تاريخ معين 
             var Logs =await _unitOfWork.Repository<DailyLog>()
-                .GetAllWithIncludesAsync(X => X.UserChallenge.UserId == userId && X.LogDate.Date == date.Date, "UserChallenge.Challenge");
+                .GetPagedAsync(1,5,X => X.UserChallenge.UserId == userId && X.LogDate.Date == date.Date, "UserChallenge.Challenge");
 
             var logsDTO = _mapper.Map<IEnumerable<DailyLogDTO>>(Logs);
 

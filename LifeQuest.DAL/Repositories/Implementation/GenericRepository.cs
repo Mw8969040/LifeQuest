@@ -16,88 +16,105 @@ namespace LifeQuest.DAL.Repositories.Implementation
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
-            _dbSet =  _context.Set<T>();
+            _dbSet = _context.Set<T>();
         }
+
         public async Task AddAsync(T entity)
         {
-          await  _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
         }
 
-        public async void Delete(int id)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-           T obj = await GetByIdAsync(id);
+            return await _dbSet.AnyAsync(predicate);
+        }
 
-            if (obj != null)
+        public async Task Delete(int id)
+        {
+            T entity = await GetByIdAsync(id);
+
+            if (entity == null)
+                return;
+
+            if (entity is BaseEntity baseEntity)
             {
-                if (obj is BaseEntity baseEntity)
-                {
-                    baseEntity.IsDeleted = true;
-                    baseEntity.UpdateAt = DateTime.Now;
-                    _dbSet.Update(obj);
-                }
-                _dbSet.Remove(obj);
+                baseEntity.IsDeleted = true;
+                baseEntity.UpdateAt = DateTime.Now;
+
+                _dbSet.Update(entity); // Soft Delete
+            }
+            else
+            {
+                _dbSet.Remove(entity); // Hard Delete
             }
         }
-        
 
-        public async Task<IEnumerable<T>> GetAllAsync(T entity)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-           return await  _dbSet.ToListAsync();
+            return await _dbSet
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public Task<IPagedList<T>> GetAllWithIncludeAsync(int pageNumber, int pageSize, Func<T, bool> predicate, params string[] Includes)
+        public Task<IPagedList<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate, params string[] Includes)
         {
-            IQueryable<T> query = _dbSet;
-
+            IQueryable<T> query = _dbSet.AsNoTracking();
             if (Includes != null)
-            {
+            { 
                 foreach (var include in Includes)
                 {
                     query = query.Include(include);
                 }
             }
-
             IPagedList<T> paged = query.Where(predicate).ToPagedList(pageNumber, pageSize);
             return Task.FromResult(paged);
         }
 
-        public async Task<IEnumerable<T>> GetAllWithIncludesAsync(Expression<Func<T, bool>> predicate, params string[] Includes)
+        public async Task<IEnumerable<T>> GetAllWithIncludesAsync(Expression<Func<T, bool>> predicate,params string[] includes)
         {
-            IQueryable<T> query = _dbSet;
-            if (Includes != null)
+            IQueryable<T> query = _dbSet.AsQueryable();
+
+            if (includes != null)
             {
-                foreach (var include in Includes)
+                foreach (var include in includes)
                 {
                     query = query.Include(include);
                 }
             }
 
-           return await query.Where(predicate).ToListAsync();
+            return await query.Where(predicate).AsNoTracking().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public Task<T> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate, params string[] Includes)
+        public async Task<T?> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate,params string[] includes)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> query = _dbSet.AsQueryable();
 
-            if (Includes != null)
+            if (includes != null)
             {
-                query = query.Where(predicate);
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
             }
-            return query.FirstOrDefaultAsync(predicate);
+
+            return await query.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
-        public void Update(T entity)
+        public Task Update(T entity)
         {
-            if(entity is BaseEntity baseEntity)
+            if (entity is BaseEntity baseEntity)
             {
                 baseEntity.UpdateAt = DateTime.Now;
             }
+
             _dbSet.Update(entity);
+
+            return Task.CompletedTask;
         }
     }
 }

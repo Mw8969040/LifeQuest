@@ -7,8 +7,10 @@ namespace LifeQuest.BLL.Services.Interfaces
     public interface IBadgeService
     {
          public Task<IEnumerable<BadgeDTO>> GetAllBadgesAsync();
-
-         public  Task<BadgeDTO> GetBadgeByIdAsync(int id);
+        Task AddBadgeAsync(BadgeDTO dto);
+        Task UpdateBadgeAsync(BadgeDTO dto);
+        Task DeleteBadgeAsync(int id);
+        public  Task<BadgeDTO> GetBadgeByIdAsync(int id);
     }
 }
 

@@ -6,6 +6,8 @@ using LifeQuest.DAL.UOW.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LifeQuest.BLL.Mapping;
+using LifeQuest.BLL.Services.Interfaces;
+using LifeQuest.BLL.Services.Implementation;
 
 namespace LIfeQuest.PresentationLayer
 {
@@ -23,6 +25,9 @@ namespace LIfeQuest.PresentationLayer
 
             // AutoMapper Di
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            // Challenge Service Di
+            builder.Services.AddScoped<IChallengeService, ChallengeService>();
 
             // ApplicationDb Context Di
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
