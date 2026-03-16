@@ -87,6 +87,10 @@ namespace LifeQuest.DAL.Repositories.Implementation
         {
             return await _dbSet.FindAsync(id);
         }
+        public async Task<T?> GetByNameAsync(string Name)
+        {
+            return await _dbSet.FindAsync(Name);
+        }
 
         public async Task<T?> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate,params string[] includes)
         {

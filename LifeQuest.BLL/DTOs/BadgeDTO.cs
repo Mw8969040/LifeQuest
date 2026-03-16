@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LifeQuest.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace LifeQuest.BLL.DTOs
         public string Description { get; set; }
         public int Point {  get; set; }
         public string image {  get; set; }
+
+        public IEnumerable<Badges> Badges { get; set; }
 
     }
 }

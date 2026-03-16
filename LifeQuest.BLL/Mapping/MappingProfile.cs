@@ -23,12 +23,11 @@ namespace LifeQuest.BLL.Mapping
                 .ForMember(dest => dest.Challenge , opt => opt.Ignore());
 
             // Category Mappings
-            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>();
             CreateMap<CategoryDTO, Category>()
                 .ForMember(dest => dest.Challenges, opt => opt.Ignore());
 
-            // Challenge Mappings
-            CreateMap<Challenge, ChallengeDTO>().ReverseMap();
+            CreateMap<Challenge, ChallengeDTO>();
             CreateMap<ChallengeDTO, Challenge>()
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
                 .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore())
@@ -42,15 +41,16 @@ namespace LifeQuest.BLL.Mapping
                 .ForMember(dest => dest.User, opt => opt.Ignore());
 
             // Badge Mappings
-            CreateMap<Badges, BadgeDTO>().ReverseMap();
+            CreateMap<Badges, BadgeDTO>();
             CreateMap<BadgeDTO, Badges>()
                 .ForMember(dest => dest.UserBadges, opt => opt.Ignore());
 
             // Level Mappings
-            CreateMap<Level, LevelDTO>().ReverseMap();
+            CreateMap<Level, LevelDTO>();
+            CreateMap<LevelDTO, Level>();
 
             // Decision Mappings
-            CreateMap<Decision, DecisionDTO>().ReverseMap();
+            CreateMap<Decision, DecisionDTO>();
             CreateMap<DecisionDTO, Decision>()
                 .ForMember(dest => dest.Metrics, opt => opt.Ignore())
                 .ForMember(dest => dest.User, opt => opt.Ignore());
@@ -64,7 +64,7 @@ namespace LifeQuest.BLL.Mapping
                 .ForMember(dest => dest.RemainingPointsForNextLevel, opt => opt.Ignore());
 
             // Metrics Mappings
-            CreateMap<MetricsCalc, MetricsCalcDTO>().ReverseMap();
+            CreateMap<MetricsCalc, MetricsCalcDTO>();
             CreateMap<MetricsCalcDTO, MetricsCalc>()
                 .ForMember(dest => dest.Decision, opt => opt.Ignore());
         }

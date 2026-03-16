@@ -50,7 +50,7 @@ namespace LIfeQuest.PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new ChallengeDto
+                var dto = new ChallengeDTO
                 {
                     Title = viewModel.Title,
                     Description = viewModel.Description,

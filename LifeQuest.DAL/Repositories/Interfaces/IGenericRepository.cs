@@ -8,6 +8,8 @@ namespace LifeQuest.DAL.Repositories.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
 
         Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByNameAsync(string Name);
+
 
         Task AddAsync(T entity);
 

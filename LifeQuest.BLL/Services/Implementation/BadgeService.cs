@@ -49,6 +49,13 @@ namespace LifeQuest.BLL.Services.Implementation
             var badge = await _unitOfWork.Repository<Badges>().GetByIdAsync(id);
             return _mapper.Map<BadgeDTO>(badge);
         }
+        public async Task<BadgeDTO> GetBadgeByNameAsync(string Name)
+        {
+            // جلب وسام معين بال ID
+            var badge = await _unitOfWork.Repository<Badges>().GetByNameAsync(Name);
+            
+            return _mapper.Map<BadgeDTO>(badge);
+        }
 
         public async Task UpdateBadgeAsync(BadgeDTO dto)
         {

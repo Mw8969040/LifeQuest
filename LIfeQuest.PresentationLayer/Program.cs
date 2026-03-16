@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LifeQuest.BLL.Mapping;
 using LifeQuest.BLL.Services.Interfaces;
 using LifeQuest.BLL.Services.Implementation;
+using LifeQuest;
+using LIfeQuest.BLL.Services.Implementation;
 
 namespace LIfeQuest.PresentationLayer
 {
@@ -37,6 +39,8 @@ namespace LIfeQuest.PresentationLayer
             builder.Services.AddScoped<IUserChallengeService, UserChallengeService>();
             builder.Services.AddScoped<IDecisionService, DecisionService>();
             builder.Services.AddScoped<IMetricsCalcService, MetricsCalcService>();
+            builder.Services.AddScoped<IApplicationUserRegisterService, ApplicationUseRegisterService>();
+            builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
 
             // ApplicationDb Context Di
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
